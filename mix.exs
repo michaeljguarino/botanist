@@ -1,7 +1,7 @@
 defmodule Botanist.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.1.1"
 
   def project do
     [
@@ -58,7 +58,6 @@ defmodule Botanist.MixProject do
     [
       main: "Botanist",
       source_url: "https://github.com/homee-engineering/botanist",
-      source_ref: "v#{@version}",
       canonical: "http://hexdocs.pm/botanist"
     ]
   end
