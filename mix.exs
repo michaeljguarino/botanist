@@ -1,10 +1,12 @@
 defmodule Botanist.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :botanist,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -55,7 +57,9 @@ defmodule Botanist.MixProject do
   defp docs do
     [
       main: "Botanist",
-      source_url: "https://github.com/elixir-ecto/ecto",
+      source_url: "https://github.com/homee-engineering/botanist",
+      source_ref: "v#{@version}",
+      canonical: "http://hexdocs.pm/botanist"
     ]
   end
 end
