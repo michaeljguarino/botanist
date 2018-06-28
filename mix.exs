@@ -9,7 +9,7 @@ defmodule Botanist.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
-      description: "",
+      description: "A run-once database seeder using Ecto",
       elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
@@ -24,8 +24,10 @@ defmodule Botanist.MixProject do
     [
       name: "botanist",
       licenses: [],
-      maintainers: [],
-      links: %{}
+      maintainers: ["Hutch Interiors Inc."],
+      links: %{
+        "GitHub" => "https://github.com/homee-engineering/botanist"
+      }
     ]
   end
 
@@ -38,10 +40,14 @@ defmodule Botanist.MixProject do
   defp deps do
     [
       {:ecto, "~> 2.2.10"},
-      {:ex_doc, "~> 0.18.3"},
+
+      # Test
       {:postgrex, "~> 0.11", only: [:test]},
       {:junit_formatter, "~> 2.2", only: [:test]},
-      {:mock, "~> 0.3.0", only: :test}
+      {:mock, "~> 0.3.0", only: :test},
+
+      # Docs
+      {:ex_doc, "~> 0.18.3", only: :dev}
     ]
   end
 end

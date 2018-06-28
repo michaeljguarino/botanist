@@ -52,4 +52,4 @@ seed do
 end
 ```
 
-### Documentation
+### [Documentation](https://hexdocs.pm/botanist/api-reference.html)
