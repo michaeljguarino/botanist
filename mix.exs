@@ -10,7 +10,8 @@ defmodule Botanist.MixProject do
       deps: deps(),
       package: package(),
       description: "A run-once database seeder using Ecto",
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      docs: docs()
     ]
   end
 
@@ -47,7 +48,14 @@ defmodule Botanist.MixProject do
       {:mock, "~> 0.3.0", only: :test},
 
       # Docs
-      {:ex_doc, "~> 0.18.3", only: :dev}
+      {:ex_doc, "~> 0.18.3"}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "Botanist",
+      source_url: "https://github.com/elixir-ecto/ecto",
     ]
   end
 end

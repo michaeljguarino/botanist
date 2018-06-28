@@ -6,6 +6,7 @@ defmodule Mix.Tasks.Ecto.Gen.Seed do
 
   @moduledoc """
   Creates a new seed file in `priv/repo/seeds` or your `seeds_path` if configured.
+
   ### Example
   ```elixir
   mix ecto.gen.seed my_seed

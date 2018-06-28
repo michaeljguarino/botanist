@@ -5,6 +5,7 @@ defmodule Mix.Tasks.Ecto.Seed do
 
   @moduledoc """
   Runs all pending seeds in `priv/repo/seeds` or, if configured, the `seeds_path` directory.
+
   If a seed has already run, it cannot be rerun. Failed seeds however, can be rerun.
   The generated migration filename will be prefixed with the current timestamp in UTC which is used for versioning and ordering.
 
