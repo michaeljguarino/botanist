@@ -1,12 +1,15 @@
 defmodule Botanist do
   @moduledoc """
-  Botanist is an atomic seeding library which uses [Ecto](https://github.com/elixir-ecto/ecto). Its intended purpose
+  Botanist is a seeding library which uses [Ecto](https://github.com/elixir-ecto/ecto). Its intended purpose
   is for seeding of a database in a safe and atomic manner.
   """
 
   @doc """
   Macro for seeding the database. No seed can be run more than once. If extra data is to be added or
   removed, a new seed must be generated with `mix ecto.gen.seed` or use `perennial_seed/1`.
+
+  A seed must be encased in a function named `planter` to be run. If multiple seeds are defined in a planter they will
+  run but will not handle errors/transactionality correctly. *This is strongly discouraged*
 
   ### Example
   ```elixir
