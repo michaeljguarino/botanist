@@ -1,7 +1,7 @@
 # Botanist
 
 Botanist is a seeding library which uses [Ecto](https://github.com/elixir-ecto/ecto). Its intended purpose
-is for run-once seeding of a database in a safe and intelligent manner.
+is for seeding of a database in a safe and atomic manner.
 
 ### Installation
 Add `botanist` to your `mix.exs` file:
@@ -47,8 +47,10 @@ import Botanist
 alias MyApp.Repo
 alias MyApp.User
 
-seed do
-  Repo.insert(%User{email: "email@gmail.com", name: "John Smith"})
+def planter do
+  seed do
+    Repo.insert(%User{email: "email@gmail.com", name: "John Smith"})
+  end
 end
 ```
 

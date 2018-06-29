@@ -1,12 +1,12 @@
 defmodule Botanist do
   @moduledoc """
   Botanist is an atomic seeding library which uses [Ecto](https://github.com/elixir-ecto/ecto). Its intended purpose
-  is for run-once seeding of a database in a safe and intelligent manner.
+  is for seeding of a database in a safe and atomic manner.
   """
 
   @doc """
   Macro for seeding the database. No seed can be run more than once. If extra data is to be added or
-  removed, a new seed must be generated with `mix ecto.gen.seed`.
+  removed, a new seed must be generated with `mix ecto.gen.seed` or use `perennial_seed/1`.
 
   ### Example
   ```elixir
@@ -15,8 +15,10 @@ defmodule Botanist do
   alias MyApp.Repo
   alias MyApp.User
 
-  seed do
-    Repo.insert(%User{email: "email@gmail.com", name: "John Smith"})
+  def planter do
+    seed do
+      Repo.insert(%User{email: "email@gmail.com", name: "John Smith"})
+    end
   end
   ```
 
@@ -51,16 +53,9 @@ defmodule Botanist do
 
         true ->
           case Repo.transaction(fn ->
-                 try do
-                   case unquote(block) do
-                     {:error, error} -> Repo.rollback(error)
-                     {:ok, output} -> output
-                     out = output -> output
-                   end
-                 rescue
-                   error -> Repo.rollback(error.message)
-                 catch
-                   error -> Repo.rollback(error)
+                 case unquote(block) do
+                   {:error, error} -> Repo.rollback(error)
+                   _ = output -> output
                  end
                end) do
             {:ok, out} ->
@@ -74,6 +69,47 @@ defmodule Botanist do
             other ->
               other
           end
+      end
+    end
+  end
+
+  @doc """
+  Macro for seeds which can be run recurrently. Functionally equivilant to `seed/1` but will run
+  every time `mix ecto.seed` is called.
+
+  ### Example
+  ```elixir
+  import Botanist
+
+  def planter do
+    perennial_seed do
+      # Recurrent work here
+    end
+  end
+  ```
+  """
+  defmacro perennial_seed(do: block) do
+    quote do
+      alias unquote(Mix.Botanist.repo())
+      require Logger
+
+      seed_name = Path.basename(__ENV__.file, ".exs")
+
+      case Repo.transaction(fn ->
+             case unquote(block) do
+               {:error, error} -> Repo.rollback(error)
+               _ = output -> output
+             end
+           end) do
+        {:ok, out} ->
+          out
+
+        {:error, error} ->
+          Logger.error("Error occurred #{error}")
+          {:error, error}
+
+        other ->
+          other
       end
     end
   end

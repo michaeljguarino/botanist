@@ -2,16 +2,16 @@ defmodule Mix.Tasks.Ecto.Gen.Seed do
   use Mix.Task
   import Mix.Generator
 
-  @shortdoc "generates new seed"
+  @shortdoc "Generates new seed"
 
   @moduledoc """
-  Creates a new seed file in `priv/repo/seeds` or your `seeds_path` if configured.
+  Creates a new seed file in `priv/repo/seeds` or your `seeds_path` if configured.The generated
+  seed filename will be prefixed with the current timestamp in UTC which is used for versioning and ordering.
 
   ### Example
   ```elixir
   mix ecto.gen.seed my_seed
   ```
-  The generated migration filename will be prefixed with the current timestamp in UTC which is used for versioning and ordering.
   """
 
   @doc false
@@ -29,7 +29,9 @@ defmodule Mix.Tasks.Ecto.Gen.Seed do
         end
 
         Path.join(path, "#{timestamp()}_#{base_name}")
-        |> create_file(seed_template([]))
+        |> create_file(
+          seed_template(mod: Module.concat([Mix.Botanist.repo(), Seeds, Macro.camelize(name)]))
+        )
 
       {_, _, _} ->
         Mix.raise("Expected a seed name e.g. mix.ecto.gen my_seed")
@@ -45,10 +47,12 @@ defmodule Mix.Tasks.Ecto.Gen.Seed do
   defp pad(i), do: to_string(i)
 
   embed_template(:seed, """
-  import Botanist
+  defmodule <%= inspect @mod %> do
+    import Botanist
 
-  seed do
+    def planter do
 
+    end
   end
   """)
 end
