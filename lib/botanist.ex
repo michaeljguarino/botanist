@@ -1,7 +1,7 @@
 defmodule Botanist do
   @moduledoc """
   Botanist is a seeding library which uses [Ecto](https://github.com/elixir-ecto/ecto). Its intended purpose
-  is for seeding of a database in a safe and atomic manner.
+  is for seeding a database in a safe and atomic manner.
   """
 
   @doc """
