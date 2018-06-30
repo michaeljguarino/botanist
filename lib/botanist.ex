@@ -8,8 +8,8 @@ defmodule Botanist do
   Macro for seeding the database. No seed can be run more than once. If extra data is to be added or
   removed, a new seed must be generated with `mix ecto.gen.seed` or use `perennial_seed/1`.
 
-  A seed must be encased in a function named `planter` to be run. The first seed in a planter will run but all
-  subsequent seeds will be skipped except for any perennial_seed/1. *This is strongly discouraged*
+  A seed must be encased in a function named `planter` to be run. Only a single seed can fit into a
+  planter.
 
   ### Example
   ```elixir
@@ -77,8 +77,10 @@ defmodule Botanist do
   end
 
   @doc """
-  Macro for seeds which can be run recurrently. Functionally equivilant to `seed/1` but will run
-  every time `mix ecto.seed` is called rather than once.
+  Macro for seeds which can be run recurrently. Functionally equivilant to `seed/1` in terms of atomicity and robustness
+  but will run every time `mix ecto.seed` is called rather than once.
+
+  Unlike `seed/1`, multiple `perennial_seed` can be planted in a single `planter` function.
 
   ### Example
   ```elixir
