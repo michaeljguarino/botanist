@@ -38,8 +38,8 @@ defmodule Mix.Botanist do
   def run_seed(seed_file) do
     basename = Path.basename(seed_file)
 
-    case Code.load_file(seed_file) |> List.first() do
-      {mod, _bin} ->
+    case resolve_seed_module(seed_file) do
+      {:ok, mod} ->
         case run_module(mod) do
           {:ok, _} ->
             Logger.info("#{basename} ran successfully")
@@ -52,10 +52,18 @@ defmodule Mix.Botanist do
           {:error, error} ->
             Logger.error("Failed to run #{basename}")
             %{file: basename, msg: error}
+
+          _ ->
+            """
+            Unexpected output at the end of #{basename}'s planter/1 function. Ensure that the output of a Botanist macro is returned.
+            """
+            |> Logger.warn()
+
+            nil
         end
 
-      _ ->
-        Logger.error("Error loading #{seed_file}")
+      {:error, error} ->
+        Logger.error(error)
     end
   end
 
@@ -68,5 +76,28 @@ defmodule Mix.Botanist do
       error when is_binary(error) -> {:error, error}
       error -> {:error, Exception.message(error)}
     end
+  end
+
+  defp resolve_seed_module(seed_file) do
+    case Code.load_file(seed_file) do
+      modules when is_list(modules) ->
+        case Enum.find(modules, fn mod -> mod |> elem(0) |> is_seed_module?() end) do
+          nil -> {:error, "#{Path.basename(seed_file)} does not have a Botanist created module"}
+          {module, _bin} -> {:ok, module}
+        end
+
+      error ->
+        {:error, "Failed to load #{Path.basename(seed_file)}: #{error}"}
+    end
+  end
+
+  defp is_seed_module?(module) do
+    base_module =
+      module
+      |> Module.split()
+      |> Enum.slice(0, 3)
+      |> Module.concat()
+
+    base_module == Module.concat([Mix.Botanist.repo(), Seeds])
   end
 end

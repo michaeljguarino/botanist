@@ -64,33 +64,19 @@ defmodule Botanist.BotanistTest do
   end
 
   test "perennial seeding" do
-    with_mock NaiveDateTime,
-      utc_now: fn ->
-        %NaiveDateTime{
-          calendar: Calendar.ISO,
-          day: 1,
-          hour: 1,
-          microsecond: {999_999, 6},
-          minute: 1,
-          month: 1,
-          second: 1,
-          year: 1
-        }
-      end do
-      # -- Given
-      #
-      Repo.insert(%Seed{name: "botanist_test", inserted_at: NaiveDateTime.utc_now()})
+    # -- Given
+    #
+    Repo.insert(%Seed{name: "botanist_test", inserted_at: NaiveDateTime.utc_now()})
 
-      # -- When
-      #
-      {:ok, out} =
-        perennial_seed do
-          {:ok, "hi"}
-        end
+    # -- When
+    #
+    {:ok, out} =
+      perennial_seed do
+        {:ok, "hi"}
+      end
 
-      # -- Then
-      #
-      assert out == "hi"
-    end
+    # -- Then
+    #
+    assert out == "hi"
   end
 end

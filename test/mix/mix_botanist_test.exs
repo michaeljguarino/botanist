@@ -82,4 +82,28 @@ defmodule Botanist.MixBotanistTest do
     assert error.file == "20180629211110_throw_seed.exs"
     assert error.msg == "bang bang"
   end
+
+  test "multi module seed" do
+    # -- Given
+    #
+
+    # -- When
+    #
+    output =
+      Mix.Botanist.run_seed(
+        Path.join([File.cwd!(), "priv", "repo", "20180630000025_test_multi_module.exs"])
+      )
+
+    # -- Then
+    #
+    seed =
+      from(
+        s in Seed,
+        where: s.name == "20180630000025_test_multi_module"
+      )
+      |> Repo.one()
+
+    assert is_nil(output)
+    assert not is_nil(seed)
+  end
 end

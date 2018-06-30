@@ -1,4 +1,4 @@
-defmodule Botanist.Repo.TestSeed1 do
+defmodule Botanist.Repo.Seeds.TestSeed1 do
   import Botanist
 
   def planter do
