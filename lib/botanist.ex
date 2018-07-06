@@ -99,13 +99,18 @@ defmodule Botanist do
       require Logger
 
       seed_name = Path.basename(__ENV__.file, ".exs")
+      unquote(block)
 
-      case Repo.transaction(fn ->
-             case unquote(block) do
-               {:error, error} -> Repo.rollback(error)
-               _ = output -> output
-             end
-           end) do
+      case Repo.transaction(
+             fn ->
+               case unquote(block) do
+                 {:error, error} -> Repo.rollback(error)
+                 _ = output -> output
+               end
+             end,
+             timeout: :infinity,
+             pool_timeout: :infinity
+           ) do
         {:ok, out} ->
           out
 

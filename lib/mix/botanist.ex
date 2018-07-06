@@ -4,20 +4,14 @@ defmodule Mix.Botanist do
   require Logger
 
   def repo do
-    case Mix.env() do
-      :test ->
-        Botanist.Repo
+    case Application.get_env(:botanist, :ecto_repo, nil) do
+      nil ->
+        Mix.raise(
+          "A repo must be added to your Botanist config. Check your config.exs for the 'ecto_repo' field under botanist"
+        )
 
-      _ ->
-        case Application.get_env(:botanist, :ecto_repo, nil) do
-          nil ->
-            Mix.raise(
-              "A repo must be added to your Botanist config. Check your config.exs for the 'ecto_repo' field under botanist"
-            )
-
-          repo ->
-            repo
-        end
+      repo ->
+        repo
     end
   end
 

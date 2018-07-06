@@ -3,7 +3,6 @@ defmodule Botanist.DummyModule do
 
   def planter do
     seed do
-
     end
   end
 end
@@ -13,7 +12,6 @@ defmodule Botanist.Repo.Seeds.TestMultiModule do
 
   def planter do
     seed do
-
     end
   end
 end
