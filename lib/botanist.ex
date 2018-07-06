@@ -99,7 +99,6 @@ defmodule Botanist do
       require Logger
 
       seed_name = Path.basename(__ENV__.file, ".exs")
-      unquote(block)
 
       case Repo.transaction(
              fn ->
