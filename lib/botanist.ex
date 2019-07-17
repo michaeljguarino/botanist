@@ -62,7 +62,7 @@ defmodule Botanist do
                  end
                end) do
             {:ok, out} ->
-              Repo.insert(%Seed{name: seed_name, inserted_at: NaiveDateTime.utc_now()})
+              Repo.insert(%Seed{name: seed_name, inserted_at: Seed.now()})
               {:ok, out}
 
             {:error, error} ->

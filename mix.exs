@@ -42,10 +42,10 @@ defmodule Botanist.MixProject do
 
   defp deps do
     [
-      {:ecto, "~> 2.2.10"},
+      {:ecto_sql, "~> 3.1"},
 
       # Test
-      {:postgrex, "~> 0.11", only: [:test]},
+      {:postgrex, ">= 0.0.0", only: [:test]},
       {:junit_formatter, "~> 2.2", only: [:test]},
       {:mock, "~> 0.3.0", only: :test},
 
