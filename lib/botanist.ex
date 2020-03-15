@@ -32,14 +32,14 @@ defmodule Botanist do
   """
   defmacro seed(do: block) do
     quote do
-      alias unquote(Mix.Botanist.repo())
       alias Botanist.Seed
       alias Ecto.Changeset
       alias Botanist.Migrations.CreateSeedTable
       import Ecto.Query
       require Logger
 
-      Seed.ensure_seed_table!(Repo)
+      repo = Mix.Botanist.repo()
+      Seed.ensure_seed_table!(repo)
 
       seed_name = Path.basename(__ENV__.file, ".exs")
 
@@ -48,21 +48,21 @@ defmodule Botanist do
           s in Seed,
           where: s.name == ^seed_name
         )
-        |> Repo.all()
+        |> repo.all()
 
       cond do
         length(seeds) > 0 ->
           {:repeat, "The seed #{seed_name} has already run."}
 
         true ->
-          case Repo.transaction(fn ->
+          case repo.transaction(fn ->
                  case unquote(block) do
-                   {:error, error} -> Repo.rollback(error)
+                   {:error, error} -> repo.rollback(error)
                    _ = output -> output
                  end
                end) do
             {:ok, out} ->
-              Repo.insert(%Seed{name: seed_name, inserted_at: Seed.now()})
+              repo.insert(%Seed{name: seed_name, inserted_at: Seed.now()})
               {:ok, out}
 
             {:error, error} ->
@@ -98,12 +98,13 @@ defmodule Botanist do
       alias unquote(Mix.Botanist.repo())
       require Logger
 
+      repo = Mix.Botanist.repo()
       seed_name = Path.basename(__ENV__.file, ".exs")
 
-      case Repo.transaction(
+      case repo.transaction(
              fn ->
                case unquote(block) do
-                 {:error, error} -> Repo.rollback(error)
+                 {:error, error} -> repo.rollback(error)
                  _ = output -> output
                end
              end,
