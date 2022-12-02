@@ -19,7 +19,8 @@ defmodule Botanist.MixProject do
 
   def application do
     [
-      applications: applications(Mix.env())
+      applications: applications(Mix.env()),
+      extra_applications: [:logger, :eex]
     ]
   end
 
@@ -42,15 +43,16 @@ defmodule Botanist.MixProject do
 
   defp deps do
     [
-      {:ecto_sql, "~> 3.1"},
+      {:ecto, "~> 3.9.2"},
+      {:ecto_sql, "~> 3.9.1"},
 
       # Test
       {:postgrex, ">= 0.0.0", only: [:test]},
       {:junit_formatter, "~> 2.2", only: [:test]},
-      {:mock, "~> 0.3.0", only: :test},
+      {:mock, "~> 0.3.7", only: :test},
 
       # Docs
-      {:ex_doc, "~> 0.18.3"}
+      {:ex_doc, "~> 0.29.1", only: :dev, runtime: false}
     ]
   end
 

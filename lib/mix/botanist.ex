@@ -73,7 +73,7 @@ defmodule Mix.Botanist do
   end
 
   defp resolve_seed_module(seed_file) do
-    case Code.load_file(seed_file) do
+    case Code.require_file(seed_file) do
       modules when is_list(modules) ->
         case Enum.find(modules, fn mod -> mod |> elem(0) |> is_seed_module?() end) do
           nil -> {:error, "#{Path.basename(seed_file)} does not have a Botanist created module"}
