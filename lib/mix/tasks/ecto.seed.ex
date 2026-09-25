@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.Ecto.Seed do
+  use Mix.Task
   require Logger
 
   @shortdoc "Runs all pending seeds"

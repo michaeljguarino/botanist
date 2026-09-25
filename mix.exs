@@ -19,7 +19,7 @@ defmodule Botanist.MixProject do
 
   def application do
     [
-      applications: applications(Mix.env())
+      extra_applications: [:logger]
     ]
   end
 
@@ -37,11 +37,12 @@ defmodule Botanist.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_all), do: ["lib"]
 
-  defp applications(:test), do: [:ecto, :postgrex]
-  defp applications(_all), do: []
-
   defp deps do
     [
+      # Direct ecto dep so Mix compile partitions put Ecto.Schema on the
+      # code path before botanist. A transitive ecto_sql -> ecto edge is
+      # not enough under MIX_OS_DEPS_COMPILE_PARTITION_COUNT.
+      {:ecto, "~> 3.1"},
       {:ecto_sql, "~> 3.1"},
 
       # Test
@@ -50,7 +51,7 @@ defmodule Botanist.MixProject do
       {:mock, "~> 0.3.0", only: :test},
 
       # Docs
-      {:ex_doc, "~> 0.18.3"}
+      {:ex_doc, "~> 0.18.3", only: :dev, runtime: false}
     ]
   end
 
